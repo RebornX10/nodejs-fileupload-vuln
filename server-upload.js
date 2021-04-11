@@ -14,6 +14,8 @@ const storage = multer.diskStorage({
         cb(null, originalname);
     }
 })
+
+
 const upload = multer({ storage }); // or simply { dest: 'uploads/' }
 app.use(express.static('public'))
 
@@ -21,4 +23,7 @@ app.post('/upload', upload.array('avatar'), (req, res) => {
     return res.json({ status: 'OK', uploaded: req.files.length });
 });
 
+// set the "uploads" route
+app.use(express.static('uploads'));
+    
 app.listen(3001);

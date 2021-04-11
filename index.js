@@ -6,6 +6,14 @@ const app = express()
 // View Engine Setup
 app.set("views",path.join(__dirname,"views"))
 app.set("view engine","ejs")
+
+// set the "uploads" route
+const uploadRoute = 'uploads/' + filename
+route.get('/uploads/:filename',(req,res) => {
+    res.sendFile(__dirname,"../uploads/"+req.param('filename'));
+    });
+//app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(uploadRoute));
     
 // var upload = multer({ dest: "Upload_folder_name" })
 // If you do not want to use diskStorage then uncomment it
