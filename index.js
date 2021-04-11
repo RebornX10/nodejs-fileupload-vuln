@@ -15,13 +15,38 @@ const storage = multer.diskStorage({
     }
 })
 
+const maxSize = 25 * 25000 * 25000 
+const upload = multer({ 
+    storage: storage,
+    limits: {fileSize: maxSize},
+    fileFilter: function (req, file, cb){
+    
+        // Set the filetypes, it is optional
+        var filetypes = /jpeg|jpg|png/;
+        var mimetype = filetypes.test(file.mimetype);
+  
+        var extname = filetypes.test(path.extname(
+                    file.originalname).toLowerCase());
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+      
+        cb("Error: File upload only supports the "
+                + "following filetypes - " + filetypes);
+      } 
+  
+// mypic is the name of file attribute 
+}); // or simply { dest: 'uploads/' }
 
-const upload = multer({ storage }); // or simply { dest: 'uploads/' }
+
 app.use(express.static('public'))
 app.use(express.static('.'))
 app.post('/upload', upload.array('avatar'), (req, res) => {
     return res.json({ status: 'OK', uploaded: req.files.length });
 });
+
+
 
 // set the "uploads" route
 app.use('/uploads', express.static('uploads'));
